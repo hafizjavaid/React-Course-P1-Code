@@ -27,20 +27,15 @@ class BurgerBuilder extends Component {
   };
 
   componentDidMount() {
-
-    axios.get("https://axios2-b928a.firebaseio.com/ingradients.json")
-    .then(response =>{
-
-
-      this.setState({ingradients : response.data})
-
-    })
-    .catch(err => {
-      console.log(err);
-      this.setState({error: true})
-
-    })
-
+    axios
+      .get("https://axios2-b928a.firebaseio.com/ingradients.json")
+      .then((response) => {
+        this.setState({ ingradients: response.data });
+      })
+      .catch((err) => {
+        console.log(err);
+        this.setState({ error: true });
+      });
   }
 
   addIngredientHandler = (type) => {
@@ -90,40 +85,27 @@ class BurgerBuilder extends Component {
     this.setState({ purchasing: false });
   };
   purchaseContinue = () => {
-    this.setState({ loading: true });
-    // alert('You Continue');
-    const order = {
-      ingradients: this.state.ingradients,
-      price: this.state.totalPrice,
-      customer: {
-        name: "Max",
-        address: {
-          street: "Test 1",
-          zipCode: "3212",
-          country: "Pakistan",
-        },
-        email: "test@gmail.com",
-      },
-      deliveryMethod: "Fastest",
-    };
-    axios
-      .post("/orders.json", order)
-      .then((response) => {
-        setTimeout(() => {
-          console.log("Loading ....");
-        }, 1000);
-        this.setState({ loading: false, purchasing: false });
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err);
-        this.setState({ loading: false, purchasing: false });
-      });
+    const querParams = [];
+
+    for (let i in this.state.ingradients) {
+      querParams.push(
+        encodeURIComponent(i) +
+          "=" +
+          encodeURIComponent(this.state.ingradients[i])
+      );
+      console.log(querParams);
+      console.log(querParams.join('&'));
+
+    }
+    querParams.push('price=' + this.state.totalPrice);
+    this.props.history.push({
+      pathname: "/checkout",
+      search: '?' + querParams.join('&'),
+    });
   };
   render() {
-
     let orderSummary = null;
-    
+
     const disabledInfo = {
       ...this.state.ingredients,
     };
@@ -131,13 +113,15 @@ class BurgerBuilder extends Component {
       disabledInfo[key] = disabledInfo[key] <= 0;
     }
 
-
-    let burger = this.state.error ? <p>Ingradients Can't Be Loaded</p> : <Spinner />
-    if(this.state.ingradients)
-    {
+    let burger = this.state.error ? (
+      <p>Ingradients Can't Be Loaded</p>
+    ) : (
+      <Spinner />
+    );
+    if (this.state.ingradients) {
       burger = (
         <Aux>
-         <Burger ingradients={this.state.ingradients}></Burger>
+          <Burger ingradients={this.state.ingradients}></Burger>
           <BuildControls
             ingredientAdded={this.addIngredientHandler}
             ingredientremoved={this.removeIngradient}
@@ -146,7 +130,6 @@ class BurgerBuilder extends Component {
             purchasable={this.state.purchasable}
             ordered={this.purchaseHandler}
           ></BuildControls>
-  
         </Aux>
       );
 
@@ -159,7 +142,7 @@ class BurgerBuilder extends Component {
         />
       );
     }
- 
+
     if (this.state.loading) {
       orderSummary = <Spinner />;
     }
@@ -168,8 +151,7 @@ class BurgerBuilder extends Component {
         <Modal shows={this.state.purchasing} modalClose={this.modalClose}>
           {orderSummary}
         </Modal>
-         {burger}
-       
+        {burger}
       </Aux>
     );
   }
