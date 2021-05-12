@@ -11,26 +11,16 @@ import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import axios from "../../axios-orders";
 import {connect} from 'react-redux';
-import * as actionTypes from "../../store/actions";
+import * as actions from "../../store/actions/index";
 
 
 class BurgerBuilder extends Component {
   state = {
     purchasing: false,
-    loading: false,
-    error: false,
   };
 
   componentDidMount() {
-    // axios
-    //   .get("https://axios2-b928a.firebaseio.com/ingradients.json")
-    //   .then((response) => {
-    //     this.setState({ ingradients: response.data });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     this.setState({ error: true });
-    //   });
+    this.props.onInitonIngradients();
   }
 
   updatePurchasable = (ingradients) => {
@@ -49,6 +39,7 @@ class BurgerBuilder extends Component {
   };
   purchaseContinue = () => {
  
+    this.props.onPurchaseInit();
     this.props.history.push("/checkout")
     
   };
@@ -62,7 +53,7 @@ class BurgerBuilder extends Component {
       disabledInfo[key] = disabledInfo[key] <= 0;
     }
 
-    let burger = this.state.error ? (
+    let burger = this.props.error ? (
       <p>Ingradients Can't Be Loaded</p>
     ) : (
       <Spinner />
@@ -92,9 +83,9 @@ class BurgerBuilder extends Component {
       );
     }
 
-    if (this.state.loading) {
-      orderSummary = <Spinner />;
-    }
+    // if (this.state.loading) {
+    //   orderSummary = <Spinner />;
+    // }
     return (
       <Aux>
         <Modal shows={this.state.purchasing} modalClose={this.modalClose}>
@@ -107,14 +98,18 @@ class BurgerBuilder extends Component {
 }
 const mapStateToProps = state =>{
   return{
-    ings: state.ingradients,
-    price: state.totalPrice
+    ings: state.burgerBuilder.ingradients,
+    price: state.burgerBuilder.totalPrice,
+    error: state.burgerBuilder.error
   }
 }
 const mapDispatchToProps = dispatch =>{
    return{
-     onIngradientAdd: (ingName) => dispatch({type: actionTypes.ADD_INGRADIENT, ingradientName: ingName}),
-     onIngradientRemove: (ingName) => dispatch({type: actionTypes.REMOVE_INGRADIENT, ingradientName: ingName})
+     onIngradientAdd: (ingName) => dispatch(actions.addIngradient(ingName)),
+     onIngradientRemove: (ingName) => dispatch(actions.removeIngradient(ingName)),
+     onInitonIngradients: () => dispatch(actions.initIngradients()),
+     onPurchaseInit: () => dispatch(actions.purchaseInit()),
+
 
    }
 }
