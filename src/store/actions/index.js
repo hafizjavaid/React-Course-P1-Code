@@ -1,8 +1,19 @@
+export {
+  addIngradient,
+  removeIngradient,
+  initIngradients,
+} from "./burgerBuilder";
 
 export {
-    addIngradient,
-    removeIngradient,
-    initIngradients
-} from './burgerBuilder';
+  purchaseStart,
+  purchaseBurgerStart,
+  purchaseInit,
+  fetchOrders,
+} from "./order";
 
-export {purchaseStart, purchaseBurgerStart, purchaseInit, fetchOrders} from './order'
+export {
+    auth,
+    logout,
+    setAuthPath,
+    authCheckState
+} from './auth'

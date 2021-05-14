@@ -125,9 +125,10 @@ class ContactData extends Component {
       ingradients: this.props.ings,
       price: this.props.price,
       orderData: formData,
+      userId: this.props.userId
     };
 
-    this.props.onOrder(order);
+    this.props.onOrder(order, this.props.token);
 
   };
   inputChange = (event, indentifier) => {
@@ -217,13 +218,15 @@ const mapStateToProps = state =>{
   return{
     ings: state.burgerBuilder.ingradients,
     price: state.burgerBuilder.totalPrice,
-    loading: state.order.loading
+    loading: state.order.loading,
+    token: state.auth.token,
+    userId: state.auth.userId 
   }
 }
 const mapDispatchToProps = dispatch =>{
   return{
    
-    onOrder: (orderData) => dispatch(actionTypes.purchaseStart(orderData))
+    onOrder: (orderData, token) => dispatch(actionTypes.purchaseStart(orderData, token))
 
   }
 }

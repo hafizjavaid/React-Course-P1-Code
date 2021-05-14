@@ -5,6 +5,7 @@ const initialState = {
   ingradients: null,
   totalPrice: 4,
   error: false,
+  building: false
 };
 const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -24,6 +25,7 @@ const addIngradient = (state, action) => {
   const updatedState = {
     ingradients: updatedIngradients,
     totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingradientName],
+    building: true
   };
 
   return updatedObject(state, updatedState);
@@ -40,6 +42,7 @@ const removeIngradient = (state, action) => {
   const updatedState = {
     ingradients: updatedIngradients,
     totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingradientName],
+    building: true
   };
 
   return updatedObject(state, updatedState);
@@ -50,6 +53,7 @@ const setIngradients = (state, action) => {
     ingradients: action.ingradients,
     error: false,
     totalPrice: 4,
+    building: false
   });
 };
 const reducer = (state = initialState, action) => {

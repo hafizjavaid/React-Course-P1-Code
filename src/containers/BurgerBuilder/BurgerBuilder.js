@@ -32,7 +32,16 @@ class BurgerBuilder extends Component {
      return sum > 0;
   };
   purchaseHandler = () => {
-    this.setState({ purchasing: true });
+
+    if(this.props.isAuthenticated)
+    {
+      this.setState({ purchasing: true });
+    }
+    else{
+      this.props.onSetAuth('/checkout');
+      this.props.history.push("/auth")
+    }
+    
   };
   modalClose = () => {
     this.setState({ purchasing: false });
@@ -69,6 +78,7 @@ class BurgerBuilder extends Component {
             price={this.props.price}
             purchasable={this.updatePurchasable(this.props.ings)}
             ordered={this.purchaseHandler}
+            isAuth={this.props.isAuthenticated}
           ></BuildControls>
         </Aux>
       );
@@ -100,7 +110,8 @@ const mapStateToProps = state =>{
   return{
     ings: state.burgerBuilder.ingradients,
     price: state.burgerBuilder.totalPrice,
-    error: state.burgerBuilder.error
+    error: state.burgerBuilder.error,
+    isAuthenticated: state.auth.token !== null
   }
 }
 const mapDispatchToProps = dispatch =>{
@@ -109,6 +120,7 @@ const mapDispatchToProps = dispatch =>{
      onIngradientRemove: (ingName) => dispatch(actions.removeIngradient(ingName)),
      onInitonIngradients: () => dispatch(actions.initIngradients()),
      onPurchaseInit: () => dispatch(actions.purchaseInit()),
+     onSetAuth: (path) => dispatch(actions.setAuthPath(path))
 
 
    }

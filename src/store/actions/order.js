@@ -21,11 +21,11 @@ export const purchaseBurgerStart = () => {
 };
 
 // For Posting Data on Firebase
-export const purchaseStart = (orderData) => {
+export const purchaseStart = (orderData, token) => {
   return (dispatch) => {
     dispatch(purchaseBurgerStart());
     axios
-      .post("/orders.json", orderData)
+      .post("/orders.json?auth=" + token, orderData)
       .then((response) => {
         console.log(response);
         dispatch(purchaseSucces(response.data.name, orderData));
@@ -61,11 +61,12 @@ export const orderStart = () => {
   };
 };
 
-export const fetchOrders = () => {
+export const fetchOrders = (token, userId) => {
   return (dispatch) => {
     dispatch(orderStart());
+    const params = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"'
     axios
-      .get("/orders.json")
+      .get("/orders.json" + params)
       .then((res) => {
         const tempOrders = [];
         console.log(res.data);

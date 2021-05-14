@@ -10,6 +10,7 @@ import reportWebVitals from "./reportWebVitals";
 import reducer from "./store/reducers/burderBuilder";
 // eslint-disable-next-line
 import orderReducer from './store/reducers/order';
+import authReducer from './store/reducers/auth'
 // eslint-disable-next-line
 import thunk from 'redux-thunk'
 
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
 
   burgerBuilder: reducer,
   order: orderReducer,
+  auth: authReducer
 
 })
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
