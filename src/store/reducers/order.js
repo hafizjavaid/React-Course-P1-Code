@@ -1,57 +1,59 @@
-import * as actionTypes from "../actions/actionTypes";
-// import reducer from './burderBuilder';
-import { updatedObject } from "../utility";
+import * as actionTypes from '../actions/actionTypes';
+import { updateObject } from '../utility';
 
 const initialState = {
-  orders: [],
-  loading: false,
-  purchasing: false,
+    orders: [],
+    loading: false,
+    purchased: false
 };
 
-const reducer = (state = initialState, action) => {
-  // eslint-disable-next-line
-  switch (action.type) {
-    case actionTypes.PURCHASE_START:
-      return updatedObject(state, {
-        loading: true,
-      });
-    case actionTypes.PURCHASE_INIT:
-      return updatedObject(state, {
-        purchasing: false,
-      });
+const purchaseInit = ( state, action ) => {
+    return updateObject( state, { purchased: false } );
+};
 
-    case actionTypes.PURCHASE_SUCCESS:
-      const newOrder = updatedObject(action.orderData, {
-        id: action.id,
-      });
-      return updatedObject(state, {
-        loading: false,
-        orders: state.orders.concat(newOrder),
-        purchasing: true,
-      });
+const purchaseBurgerStart = ( state, action ) => {
+    return updateObject( state, { loading: false } );
+};
 
-    case actionTypes.PURCHASE_FAIL:
-      return updatedObject(state, {
+const purchaseBurgerSuccess = ( state, action ) => {
+    const newOrder = updateObject( action.orderData, { id: action.orderId } );
+    return updateObject( state, {
         loading: false,
-      });
-    case actionTypes.ORDERS_START:
-      return updatedObject(state, {
-        loading: true,
-      });
-    case actionTypes.ORDERS_SUCCESS:
-        console.log(action.orders);
-      return updatedObject(state, {
+        purchased: true,
+        orders: state.orders.concat( newOrder )
+    } );
+};
+
+const purchaseBurgerFail = ( state, action ) => {
+    return updateObject( state, { loading: false } );
+};
+
+const fetchOrdersStart = ( state, action ) => {
+    return updateObject( state, { loading: true } );
+};
+
+const fetchOrdersSuccess = ( state, action ) => {
+    return updateObject( state, {
         orders: action.orders,
-        loading: false,
-      });
+        loading: false
+    } );
+};
 
-    case actionTypes.ORDERS_FAIL:
-      return updatedObject(state, {
-        loading: false,
-      });
-  }
+const fetchOrdersFail = ( state, action ) => {
+    return updateObject( state, { loading: false } );
+};
 
-  return state;
+const reducer = ( state = initialState, action ) => {
+    switch ( action.type ) {
+        case actionTypes.PURCHASE_INIT: return purchaseInit( state, action );
+        case actionTypes.PURCHASE_BURGER_START: return purchaseBurgerStart( state, action );
+        case actionTypes.PURCHASE_BURGER_SUCCESS: return purchaseBurgerSuccess( state, action )
+        case actionTypes.PURCHASE_BURGER_FAIL: return purchaseBurgerFail( state, action );
+        case actionTypes.FETCH_ORDERS_START: return fetchOrdersStart( state, action );
+        case actionTypes.FETCH_ORDERS_SUCCESS: return fetchOrdersSuccess( state, action );
+        case actionTypes.FETCH_ORDERS_FAIL: return fetchOrdersFail( state, action );
+        default: return state;
+    }
 };
 
 export default reducer;

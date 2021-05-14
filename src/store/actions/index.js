@@ -1,19 +1,16 @@
 export {
-  addIngradient,
-  removeIngradient,
-  initIngradients,
-} from "./burgerBuilder";
-
+    addIngredient,
+    removeIngredient,
+    initIngredients
+} from './burgerBuilder';
 export {
-  purchaseStart,
-  purchaseBurgerStart,
-  purchaseInit,
-  fetchOrders,
-} from "./order";
-
+    purchaseBurger,
+    purchaseInit,
+    fetchOrders
+} from './order';
 export {
     auth,
     logout,
-    setAuthPath,
+    setAuthRedirectPath,
     authCheckState
-} from './auth'
+} from './auth';

@@ -1,32 +1,16 @@
-import React from "react";
+import React from 'react';
 
-import { NavLink } from "react-router-dom";
-import "./NavigationItems.css";
-const NavigationItems = (props) => {
-  return (
-    <ul className="NavigationItems">
-      <li className="NavigationItem">
-        <NavLink exact to="/">
-          Burger Builder
-        </NavLink>
-      </li>
-      {props.isAuth ? (
-        <li className="NavigationItem">
-          <NavLink to="/orders"> Orders</NavLink>
-        </li>
-      ) : null}
+import classes from './NavigationItems.css';
+import NavigationItem from './NavigationItem/NavigationItem';
 
-      {!props.isAuth ? (
-        <li className="NavigationItem">
-          <NavLink to="/auth"> Authenticate</NavLink>
-        </li>
-      ) : (
-        <li className="NavigationItem">
-          <NavLink to="/logout"> Logout</NavLink>
-        </li>
-      )}
+const navigationItems = ( props ) => (
+    <ul className={classes.NavigationItems}>
+        <NavigationItem link="/" exact>Burger Builder</NavigationItem>
+        {props.isAuthenticated ? <NavigationItem link="/orders">Orders</NavigationItem> : null}
+        {!props.isAuthenticated
+            ? <NavigationItem link="/auth">Authenticate</NavigationItem>
+            : <NavigationItem link="/logout">Logout</NavigationItem>}
     </ul>
-  );
-};
+);
 
-export default NavigationItems;
+export default navigationItems;
